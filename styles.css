@@ -1,28 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Custom variables for cute and friendly vibe */
+@plugin "@tailwindcss/postcss";
+
+@theme {
+  --color-pink: #ff66b3;
+  --color-bg: #fffdf7;
+  --color-card: #ffffff;
+  --color-text: #333333;
+  --color-text-muted: #6b7280;
+  --color-border-pink-light: #fecdd3;
+  --color-border-pink-medium: #f472b6;
+  
+  --font-sans: Inter, system-ui, -apple-system, Arial, sans-serif;
+}
+
+/* Custom variables used in theme */
 :root {
-  --pink: #ff66b3; /* Primary cute color */
-  --bg-light: #fffdf7; /* Light creamy background */
-  --card-bg: #ffffff; /* White card background */
-  --text-color: #333333; /* Dark text for contrast */
-  --text-muted: #6b7280; /* Muted gray for secondary text */
-  --border-pink-light: #fecdd3; /* Lighter pink border */
-  --border-pink-medium: #f472b6; /* Medium pink border */
+  --pink: var(--color-pink); 
+  --bg-light: var(--color-bg);
+  --card-bg: var(--color-card);
+  --text-color: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --border-pink-light: var(--color-border-pink-light);
+  --border-pink-medium: var(--color-border-pink-medium);
 }
 
 /* Apply custom colors globally */
 body {
-  background-color: var(--bg-light);
-  color: var(--text-color);
-  font-family: 'Inter', 'system-ui', '-apple-system', 'Arial', sans-serif; /* Example: use Inter if loaded */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
 }
 
 /* Specific elements */
 .shadow-xl {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
 }
 
 /* Button styling */
@@ -43,9 +55,10 @@ input[type="date"] {
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="date"]:focus {
-  ring-width: 2px;
-  ring-color: var(--pink);
-  border-color: var(--border-pink-medium);
+  outline-width: 2px;
+  outline-color: var(--color-pink);
+  border-color: var(--color-border-pink-medium);
+  outline-style: solid;
 }
 
 /* Ensure smooth scrolling */

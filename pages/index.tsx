@@ -10,7 +10,8 @@ interface Expense {
   created_at?: string;
 }
 
-const BACKEND_URL = 'http://127.0.0.1:8000';
+
+
 
 export default function Home() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -30,13 +31,17 @@ export default function Home() {
       setExpenses(data);
     } catch (err: any) {
       console.error("Failed to fetch expenses:", err);
-      setError(`Could not load expenses. Is the backend running at ${BACKEND_URL}? ${err.message}`);
+      setError(`Could not load expenses. ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const addExpense = async (expenseData: Omit<Expense, 'id' | 'created_at'>) => {
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  const addExpense = async (expenseData: { category: string; amount: string; date?: string | null }) => {
     setError(null);
     try {
       const res = await fetch('/api/expenses', {
@@ -60,14 +65,8 @@ export default function Home() {
     }
   };
 
-  // Styling for a cute and friendly vibe
-  const pink = '#ff66b3'; // Primary cute color
-  const bgLight = '#fffdf7'; // Creamy background
-  const cardBg = '#ffffff'; // White cards
-  const textColor = '#333333'; // Dark text for contrast
-
   return (
-    <div className="min-h-screen bg-bg text-text font-sans p-4" style={{ backgroundColor: bgLight, color: textColor }}>
+    <div className="min-h-screen bg-bg text-text font-sans p-4">
       <h1 className="text-4xl font-bold mb-8 text-pink text-center drop-shadow-lg">✨ Expense Tracker ✨</h1>
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
       {loading && <p className="text-center mb-4 text-pink animate-pulse">Loading expenses...</p>}

@@ -2,14 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const BACKEND_URL = 'http://127.0.0.1:8000';
 
-interface ExpenseDataFromBackend {
-  id: string;
-  category: string;
-  amount: number;
-  date?: string | null;
-  created_at?: string;
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
@@ -18,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
-      const data: ExpenseDataFromBackend[] = await response.json();
+      const data = await response.json();
       res.status(200).json(data);
     } catch (error: any) {
       console.error("Error fetching expenses from backend:", error);
@@ -36,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ category: String(category), amount: Number(amount), date: date }), // Sending date if provided
+        body: JSON.stringify({ category: String(category), amount: Number(amount) }), // FastAPI expects category (string) and amount (float)
       });
       
       if (!response.ok) {
@@ -44,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
       
-      const backendResponse: ExpenseDataFromBackend = await response.json();
+      const backendResponse = await response.json(); // Expecting {id: ..., category: ..., amount: ..., created_at: ...} from backend
       res.status(201).json(backendResponse);
 
     } catch (error: any) {
